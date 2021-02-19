@@ -1,0 +1,28 @@
+{
+  "name": "vite-project",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build-test": "vite build --mode test",
+    "build-production": "vite build --mode production",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@vant/touch-emulator": "^1.2.0",
+    "axios": "^0.21.1",
+    "nprogress": "^0.2.0",
+    "qs": "^6.9.6",
+    "vant": "^3.0.6",
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.1.4",
+    "@vue/compiler-sfc": "^3.0.5",
+    "less": "^4.1.1",
+    "less-loader": "^8.0.0",
+    "process": "^0.11.10",
+    "vite": "^2.0.0",
+    "webpack-bundle-analyzer": "^4.4.0"
+  }
+}
