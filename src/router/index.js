@@ -32,8 +32,13 @@ const routes = [
         path: '/demo',
         name: 'demo',
         component: () => import('@/views/demo/Index.vue'),
-        redirect: '/demo/list',
+        redirect: '/demo/demo',
         children: [
+            {
+                path: 'demo',
+                name: 'demo',
+                component: () => import('@/views/demo/Demo.vue')
+            },
             {
                 path: 'list',
                 name: 'list',

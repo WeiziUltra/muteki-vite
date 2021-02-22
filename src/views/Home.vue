@@ -24,6 +24,7 @@
             let navList = reactive([
                 {title: '登录页', to: '/login'},
                 {title: '分页列表', to: '/demo/list'},
+                {title: 'demo', to: '/demo/demo'},
             ]);
 
             return {
