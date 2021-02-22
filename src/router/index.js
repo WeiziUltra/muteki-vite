@@ -44,6 +44,11 @@ const routes = [
                 name: 'list',
                 component: () => import('@/views/demo/List.vue')
             },
+            {
+                path: 'amap',
+                name: 'amap',
+                component: () => import('@/views/demo/Amap.vue')
+            },
         ]
     },
     {

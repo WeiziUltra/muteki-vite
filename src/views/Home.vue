@@ -25,6 +25,7 @@
                 {title: '登录页', to: '/login'},
                 {title: '分页列表', to: '/demo/list'},
                 {title: 'demo', to: '/demo/demo'},
+                {title: '高德地图', to: '/demo/amap'},
             ]);
 
             return {
