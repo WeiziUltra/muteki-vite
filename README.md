@@ -3,6 +3,8 @@
 * 更多功能添加中。。。
 
 * [在线演示地址](http://82.156.70.219/muteki-vite)  
+* 打包后部分文件大小
+    ![avatar](http://82.156.70.219/upload/muteki/vite/build.png)
 
 * 目录结构
     * assets: 存放静态文件
