@@ -1,4 +1,4 @@
-# muteki-vant
+# muteki-vant-vite
 * 使用*vue3.0*、*vite2.0*和*vant3.0*搭建的手机端基本项目,封装了常用的方法，ajax请求等
 * 更多功能添加中。。。
 

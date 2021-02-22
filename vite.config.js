@@ -44,7 +44,7 @@ export default ({command, mode}) => {
          * 完整的 URL，例如 https://foo.com/
          * 空字符串或 ./（用于开发环境）
          */
-        base: PRODUCTION === mode ? '/muteki-vant/' : './',
+        base: PRODUCTION === mode ? '/muteki-vite/' : './',
         server: {
             port: 80,
             https: false,
