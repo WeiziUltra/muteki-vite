@@ -21,6 +21,9 @@ const routes = [
     {
         path: '/me',
         name: 'me',
+        meta: {
+            title: '我的'
+        },
         component: () => import('@/views/me/Index.vue')
     },
     {
@@ -64,6 +67,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    //如果设置标题就显示，没设置使用默认
+    if (null != to.meta && null != to.meta.title && '' !== to.meta.title) {
+        document.title = to.meta.title || import.meta.env.VITE_APP_TITLE;
+    } else {
+        document.title = import.meta.env.VITE_APP_TITLE;
+    }
     //浏览器上方显示进度条
     NProgress.start();
     //正常放行
