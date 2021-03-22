@@ -7,12 +7,14 @@
         <van-list v-model:loading="onLoad.loading"
                   :finished="onLoad.finish"
                   :finished-text="finishText"
-                  v-model:error.sync="error.error"
+                  v-model:error="error.error"
                   :error-text="error.errorText"
                   :offset="offset"
                   :loading-text="loadingText"
                   @load="onLoad.load">
-            <slot></slot>
+            <template v-if="!error.error">
+                <slot></slot>
+            </template>
         </van-list>
     </van-pull-refresh>
 </template>
@@ -254,7 +256,7 @@
                         error.errorText = `加载失败，请重试。${e}`;
                         console.warn(`url:${url}:请求出错，详情"${e}`);
                     }
-                }).catch(error => {
+                }).catch(e => {
                     /**关闭加载中动画*/
                     clearTimeout(loadingTimer);
                     if (null != loading) {
@@ -263,8 +265,8 @@
                     pull.loading = false;
                     onLoad.loading = false;
                     error.error = true;
-                    error.errorText = `加载失败，请重试。${error}`;
-                    console.warn(`url:${url}:请求出错，详情"${error}`);
+                    error.errorText = `加载失败，请重试。${e}`;
+                    console.warn(`url:${url}:请求出错，详情"${e}`);
                 });
             }
             //没有更多了
