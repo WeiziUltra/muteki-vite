@@ -8,8 +8,12 @@ const root = process.cwd();
 //适配低版本浏览器
 import legacy from '@vitejs/plugin-legacy';
 //gzip压缩
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
-// https://cn.vitejs.dev/config/
+import viteCompression from 'vite-plugin-compression'
+
+/**
+ * 配置官网
+ * https://cn.vitejs.dev/config/
+ */
 export default ({command, mode}) => {
     //viteEnv   env常量
     const viteEnv = loadEnv(mode, root);
@@ -22,15 +26,13 @@ export default ({command, mode}) => {
                 targets: ['defaults', 'not IE 11']
             }),*/
             //gzip
-            /*new CompressionWebpackPlugin({
-                algorithm: 'gzip',
-                //匹配的文件名
-                test: /\.js$|\.html$|\.css/,
-                //对超过1K的压缩
+            viteCompression({
+                verbose: true,
+                disable: false,
                 threshold: 1024,
-                //是否删除原文件
-                deleteOriginalAssets: false
-            })*/
+                algorithm: 'gzip',
+                ext: '.gz'
+            })
         ],
         resolve: {
             //别名配置
