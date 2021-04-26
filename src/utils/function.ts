@@ -1,5 +1,7 @@
 //引入全局常量
 import $global from './global';
+//md5
+import jsMd5 from 'js-md5';
 
 /**
  * 判断是否为空
@@ -132,6 +134,18 @@ function setSessionStorage(key: string, value: any = '') {
 }
 
 /**
+ * 将数据从session中删除
+ * @param key
+ */
+function removeSessionStorage(key: string) {
+    if (null == key) {
+        return;
+    }
+    key = `${$global.storagePrefix}-${key}`;
+    sessionStorage.removeItem(key);
+}
+
+/**
  * 获取location存储的数据
  * @param key
  * @returns {*}
@@ -159,6 +173,27 @@ function setLocationStorage(key: string, value: any = '') {
 }
 
 /**
+ * 删除location存储的数据
+ * @param key
+ * @returns {*}
+ */
+function removeLocationStorage(key: string) {
+    if (null == key) {
+        return;
+    }
+    key = `${$global.storagePrefix}-${key}`;
+    localStorage.removeItem(key);
+}
+
+/**
+ * md5加密
+ * @param str
+ */
+function md5(str: string) {
+    return jsMd5(str);
+}
+
+/**
  * 将方法暴露出去
  */
 export default {
@@ -171,6 +206,9 @@ export default {
     getNowDate,
     getSessionStorage,
     setSessionStorage,
+    removeSessionStorage,
     getLocationStorage,
-    setLocationStorage
+    setLocationStorage,
+    removeLocationStorage,
+    md5,
 };

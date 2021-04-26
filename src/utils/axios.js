@@ -26,6 +26,7 @@ axios.interceptors.request.use(
  *
  * 封装axios请求
  *
+ * @param isLock 启用锁，解决短时间多次点击,开启后相同的请求不会提交
  * @param allUrl 请求的url为完整url
  * @param allSuccess 返回所有成功回调,不包含status不是200的出错请求
  * @param url 请求地址
@@ -36,10 +37,10 @@ axios.interceptors.request.use(
  * @param timeShowLoadAnimation 多长时间之后显示加载中动画,单位毫秒
  * @param success 成功回调
  * @param fail 失败回调
- * @returns {Promise<any>}
  */
 const myAxios = function (
     {
+        isLock = false,
         allUrl = false,
         allSuccess = false,
         url = '',
@@ -53,6 +54,19 @@ const myAxios = function (
         fail = function () {
         }
     } = {}) {
+    //锁 key
+    let lockKey = null;
+    //开启锁
+    if (isLock) {
+        //创建key
+        lockKey = $function.md5(url + '_' + method + '_' + JSON.stringify(data));
+        //如果有值,代表请求中
+        if ($function.getSessionStorage(lockKey)) {
+            return;
+        }
+        //设置为true
+        $function.setSessionStorage(lockKey, true);
+    }
     /**timeShowLoadAnimation时间之后开启加载中动画*/
     let loading = null;
     let loadingTimer = setTimeout(() => {
@@ -87,6 +101,10 @@ const myAxios = function (
         }
     }
     axios(_axios).then((res) => {
+        /*关闭锁*/
+        if (isLock) {
+            $function.removeSessionStorage(lockKey);
+        }
         /**关闭加载中动画*/
         clearTimeout(loadingTimer);
         if (null != loading) {
@@ -132,6 +150,10 @@ const myAxios = function (
             console.error(e);
         }
     }).catch((error) => {
+        /*关闭锁*/
+        if (isLock) {
+            $function.removeSessionStorage(lockKey);
+        }
         /**关闭加载中动画*/
         clearTimeout(loadingTimer);
         if (null != loading) {
