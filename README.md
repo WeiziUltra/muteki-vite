@@ -4,7 +4,7 @@
 
 * [在线演示地址](http://82.156.70.219/muteki-vite)  
 * 打包后部分文件大小
-    ![avatar](http://82.156.70.219/upload/muteki/vite/build.png)
+    ![avatar](http://82.156.70.219/upload/muteki/vite/build20210426.png)
 
 * 目录结构
     * assets: 存放静态文件

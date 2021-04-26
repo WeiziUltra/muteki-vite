@@ -75,6 +75,10 @@ const myAxios = function (
             forbidClick: true,
             duration: 0,
         });
+        /*加载中页面无法操作，移除锁*/
+        if (isLock) {
+            $function.removeSessionStorage(lockKey);
+        }
     }, timeShowLoadAnimation);
     let _axios = {
         //请求的url是否为全部url
@@ -101,7 +105,7 @@ const myAxios = function (
         }
     }
     axios(_axios).then((res) => {
-        /*关闭锁*/
+        /*移除锁*/
         if (isLock) {
             $function.removeSessionStorage(lockKey);
         }
@@ -150,7 +154,7 @@ const myAxios = function (
             console.error(e);
         }
     }).catch((error) => {
-        /*关闭锁*/
+        /*移除锁*/
         if (isLock) {
             $function.removeSessionStorage(lockKey);
         }
