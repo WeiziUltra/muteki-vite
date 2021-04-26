@@ -9,6 +9,7 @@ const root = process.cwd();
 import legacy from '@vitejs/plugin-legacy';
 //gzip压缩
 import viteCompression from 'vite-plugin-compression'
+import styleImport from 'vite-plugin-style-import';
 
 /**
  * 配置官网
@@ -32,6 +33,15 @@ export default ({command, mode}) => {
                 threshold: 1024,
                 algorithm: 'gzip',
                 ext: '.gz'
+            }),
+            styleImport({
+                libs: [{
+                    libraryName: 'vant',
+                    esModule: true,
+                    resolveStyle: (name) => {
+                        return `vant/es/${name}/style`;
+                    },
+                },]
             })
         ],
         resolve: {
