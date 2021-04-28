@@ -19,6 +19,11 @@ const routes = [
         component: () => import('@/views/login/Index.vue')
     },
     {
+        path: '/wxLogin',
+        name: 'wxLogin',
+        component: () => import('@/views/login/WxLogin.vue')
+    },
+    {
         path: '/me',
         name: 'me',
         meta: {

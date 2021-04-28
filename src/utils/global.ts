@@ -7,6 +7,8 @@ export default {
     api: {
         //登录
         login: '/api/login',
+        //微信公众号重定向
+        getRedirectUri: '/api/wx/getRedirectUri',
         //用户部分
         user: {
             //获取用户信息
