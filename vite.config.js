@@ -59,6 +59,7 @@ export default ({command, mode}) => {
         base: PRODUCTION === mode ? '/muteki-vite/' : './',
         server: {
             port: 80,
+            host: '0.0.0.0',
             https: false,
         },
         css: {

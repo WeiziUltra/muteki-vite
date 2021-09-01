@@ -1,7 +1,10 @@
 //引入全局常量
 import $global from './global';
 //md5
+// @ts-ignore
 import jsMd5 from 'js-md5';
+//vant组件的常用方法
+import {Notify} from 'vant';
 
 /**
  * 判断是否为空
@@ -194,6 +197,62 @@ function md5(str: string) {
 }
 
 /**
+ * 校验身份证
+ * @param value
+ */
+function isIdNumber(value) {
+    let reg = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+    if (!reg.test(value)) {
+        return false;
+    }
+    let weightingFactor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    let num = 0;
+    for (let i = 0; i < value.length - 1; i++) {
+        num += parseInt(value.substring(i, i + 1)) * weightingFactor[i];
+    }
+    let remainder = num % 11;
+    let remainderArr = ["1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"];
+    let last = '' + value.substring(value.length - 1, value.length);
+    return remainderArr[remainder] === last;
+}
+
+/**
+ * 拨打电话
+ */
+function callPhone(phone = '') {
+    window.location.href = `tel:${phone}`;
+}
+
+/**
+ * 复制到剪切板
+ * @param value
+ */
+function copyClipboard(value = '') {
+    let input = document.createElement('input');
+    input.setAttribute('readonly', 'readonly');
+    input.setAttribute('value', value);
+    document.body.appendChild(input);
+    input.focus();
+    input.setSelectionRange(0, 99999);
+    if (document.execCommand) {
+        document.execCommand('copy');
+        Notify({
+            type: 'primary',
+            message: `已复制到剪切板`,
+            duration: 2000
+        });
+    } else {
+        Notify({
+            type: 'danger',
+            message: `复制失败`,
+            duration: 2000
+        });
+    }
+    input.blur();
+    document.body.removeChild(input);
+}
+
+/**
  * 将方法暴露出去
  */
 export default {
@@ -211,4 +270,7 @@ export default {
     setLocationStorage,
     removeLocationStorage,
     md5,
+    isIdNumber,
+    callPhone,
+    copyClipboard,
 };

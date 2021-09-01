@@ -1,17 +1,10 @@
 <template>
-    <van-nav-bar title="自定义页面"/>
+    <NavBar title="自定义页面"/>
     <wei-tabbar activeTab="customize"></wei-tabbar>
 </template>
 
-<script>
-    import {defineAsyncComponent} from 'vue';
+<script setup>
     import {NavBar} from 'vant';
+    import WeiTabbar from '@/components/tabbar/Index.vue';
 
-    export default {
-        name: "Customize",
-        components: {
-            [NavBar.name]: NavBar,
-            'wei-tabbar': defineAsyncComponent(() => import('@/components/tabbar/Index.vue'))
-        },
-    }
 </script>
