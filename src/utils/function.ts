@@ -4,7 +4,7 @@ import $global from './global';
 // @ts-ignore
 import jsMd5 from 'js-md5';
 //vant组件的常用方法
-import {Notify} from 'vant';
+import {Toast} from 'vant';
 
 /**
  * 判断是否为空
@@ -236,16 +236,14 @@ function copyClipboard(value = '') {
     input.setSelectionRange(0, 99999);
     if (document.execCommand) {
         document.execCommand('copy');
-        Notify({
-            type: 'primary',
-            message: `已复制到剪切板`,
-            duration: 2000
+        Toast({
+            message: '内容已复制',
+            position: 'bottom',
         });
     } else {
-        Notify({
-            type: 'danger',
-            message: `复制失败`,
-            duration: 2000
+        Toast({
+            message: '当前浏览器不支持复制功能',
+            position: 'bottom',
         });
     }
     input.blur();

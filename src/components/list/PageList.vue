@@ -210,15 +210,18 @@
                 /**token过期处理*/
                 if (401 === code) {
                     $vant.errorMsg('登陆过期，自动登录中。。。');
+                    error.error = true;
+                    error.errorText = `登陆过期，自动登录中。。。`;
                     let timer = setTimeout(() => {
+                        $router.replace('/login');
                         clearTimeout(timer);
-                        $router.replace('login');
                     }, 3000);
                     return;
                 }
                 /**处理code不为0的出错请求*/
                 if (200 !== code) {
                     $vant.errorMsg(msg);
+                    error.error = true;
                     error.errorText = msg;
                     console.warn(`url:${url}:请求出错，详情"${JSON.stringify(res['data'])}`)
                     return;
