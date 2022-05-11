@@ -12,6 +12,8 @@ import viteCompression from 'vite-plugin-compression'
 import styleImport from 'vite-plugin-style-import';
 import {injectHtml} from "vite-plugin-html";
 
+import visualizer from "rollup-plugin-visualizer";
+
 /**
  * 配置官网
  * https://cn.vitejs.dev/config/
@@ -56,6 +58,12 @@ export default ({command, mode}) => {
                     appLastVersion: new Date().getTime(),
                 }
             }),
+            //依赖分析
+            visualizer({
+                open: PRODUCTION !== mode,
+                gzipSize: true,
+                brotliSize: true,
+            })
         ],
         resolve: {
             //别名配置
