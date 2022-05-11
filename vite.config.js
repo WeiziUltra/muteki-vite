@@ -10,6 +10,7 @@ import legacy from '@vitejs/plugin-legacy';
 //gzip压缩
 import viteCompression from 'vite-plugin-compression'
 import styleImport from 'vite-plugin-style-import';
+import {injectHtml} from "vite-plugin-html";
 
 /**
  * 配置官网
@@ -41,8 +42,20 @@ export default ({command, mode}) => {
                     resolveStyle: (name) => {
                         return `vant/es/${name}/style`;
                     },
-                },]
-            })
+                }, {
+                    libraryName: "ant-design-vue",
+                    esModule: true,
+                    resolveStyle: (name) => {
+                        return `ant-design-vue/es/${name}/style/css`;
+                    },
+                }]
+            }),
+            injectHtml({
+                data: {
+                    //向页面添加版本号，解决缓存问题
+                    appLastVersion: new Date().getTime(),
+                }
+            }),
         ],
         resolve: {
             //别名配置
@@ -88,6 +101,21 @@ export default ({command, mode}) => {
             sourcemap: PRODUCTION !== mode,
             //启用/禁用 brotli 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。
             brotliSize: false,
+            // 生产环境移除console、debugger
+            terserOptions: {
+                compress: {
+                    drop_console: PRODUCTION === mode,
+                    drop_debugger: PRODUCTION === mode,
+                },
+            },
+            //输出配置
+            rollupOptions: {
+                output: {
+                    chunkFileNames: "static/js/[name]-[hash].js",
+                    entryFileNames: "static/js/[name]-[hash].js",
+                    assetFileNames: "static/[ext]/[name]-[hash].[ext]",
+                },
+            },
         },
 
     });

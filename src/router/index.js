@@ -10,22 +10,18 @@ NProgress.configure({
 const routes = [
     {
         path: '/',
-        name: 'home',
         component: () => import('@/views/Home.vue')
     },
     {
         path: '/login',
-        name: 'login',
         component: () => import('@/views/login/Index.vue')
     },
     {
         path: '/wxLogin',
-        name: 'wxLogin',
         component: () => import('@/views/login/WxLogin.vue')
     },
     {
         path: '/me',
-        name: 'me',
         meta: {
             title: '我的'
         },
@@ -33,29 +29,28 @@ const routes = [
     },
     {
         path: '/customize',
-        name: 'customize',
         component: () => import('@/views/customize/Index.vue')
     },
     {
         path: '/demo',
-        name: 'demo',
         component: () => import('@/views/demo/Index.vue'),
         redirect: '/demo/demo',
         children: [
             {
                 path: 'demo',
-                name: 'demo',
                 component: () => import('@/views/demo/Demo.vue')
             },
             {
                 path: 'list',
-                name: 'list',
                 component: () => import('@/views/demo/List.vue')
             },
             {
                 path: 'amap',
-                name: 'amap',
                 component: () => import('@/views/demo/Amap.vue')
+            },
+            {
+                path: 'ant',
+                component: () => import('@/views/demo/Ant.vue')
             },
         ]
     },

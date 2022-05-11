@@ -19,6 +19,7 @@
         {title: '分页列表', to: '/demo/list'},
         {title: 'demo', to: '/demo/demo'},
         {title: '高德地图', to: '/demo/amap'},
+        {title: 'ant组件', to: '/demo/ant'},
     ]);
 
 </script>

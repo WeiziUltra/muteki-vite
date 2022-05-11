@@ -228,6 +228,7 @@
                 }
                 try {
                     let {list} = res['data']['data'];
+                    error.error = false;
                     //如果为空，代表没数据
                     if (null == list || 0 >= list.length) {
                         onLoad.finish = true;

@@ -2,7 +2,7 @@
 
 export default {
     //session和location存放数据的前缀，用于和同域名/ip项目区分
-    storagePrefix: 'weiziplus',
+    storagePrefix: import.meta.env.VITE_APP_STORAGE_PREFIX,
     //请求的接口地址
     api: {
         //登录
