@@ -10,7 +10,6 @@ import legacy from '@vitejs/plugin-legacy';
 //gzip压缩
 import viteCompression from 'vite-plugin-compression'
 import styleImport from 'vite-plugin-style-import';
-import {injectHtml} from "vite-plugin-html";
 
 import visualizer from "rollup-plugin-visualizer";
 
@@ -51,12 +50,6 @@ export default ({command, mode}) => {
                         return `ant-design-vue/es/${name}/style/css`;
                     },
                 }]
-            }),
-            injectHtml({
-                data: {
-                    //向页面添加版本号，解决缓存问题
-                    appLastVersion: new Date().getTime(),
-                }
             }),
             //依赖分析
             visualizer({
