@@ -3,13 +3,11 @@
     <div v-show="offset <= scrollTop"
          class="back-top"
          @click="click">
-        <Icon name="back-top" size="27" color="#fff"/>
+        <van-icon name="back-top" size="27" color="#fff"/>
     </div>
 </template>
 
 <script setup>
-    import {Icon} from 'vant';
-
     import {ref, onMounted, onUnmounted} from 'vue';
 
     const props = defineProps({

@@ -1,27 +1,28 @@
 <template>
-    <PullRefresh v-model="pull.loading"
-                 :pulling-text="pullingText"
-                 :loosing-text="loosingText"
-                 :success-text="successText"
-                 @refresh="pull.onRefresh">
-        <List v-model:loading="onLoad.loading"
-              :finished="onLoad.finish"
-              :finished-text="finishText"
-              v-model:error="error.error"
-              :error-text="error.errorText"
-              :offset="offset"
-              :loading-text="loadingText"
-              @load="onLoad.load">
+    <van-pull-refresh v-model="pull.loading"
+                      :pulling-text="pullingText"
+                      :loosing-text="loosingText"
+                      :success-text="successText"
+                      @refresh="pull.onRefresh">
+        <van-list v-model:loading="onLoad.loading"
+                  :finished="onLoad.finish"
+                  :finished-text="finishText"
+                  v-model:error="error.error"
+                  :error-text="error.errorText"
+                  :offset="offset"
+                  :loading-text="loadingText"
+                  @load="onLoad.load">
             <template v-if="!error.error">
                 <slot></slot>
             </template>
-        </List>
-    </PullRefresh>
+        </van-list>
+    </van-pull-refresh>
 </template>
 <!--分页列表，包含下拉刷新和上拉加载-->
 <!--@change:list改变时触发，内置参数list(改变后的数组)-->
 <script setup>
-    import {PullRefresh, List, Toast} from 'vant';
+    import {Toast} from 'vant';
+    import 'vant/es/toast/style';
     /**引入axios*/
     import axios from "axios";
     /**引入参数处理*/

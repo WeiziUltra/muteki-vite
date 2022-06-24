@@ -1,27 +1,26 @@
 <template>
-    <Tabbar v-model="activeTab">
+    <van-tabbar v-model="activeTab">
         <template v-for="item in tabbar.list" :key="item.name">
             <template v-if="!item.slot">
-                <TabbarItem :name="item.name"
-                            :to="`/${item.name}`"
-                            :icon="item.icon">{{ item.title }}
-                </TabbarItem>
+                <van-tabbar-item :name="item.name"
+                                 :to="`/${item.name}`"
+                                 :icon="item.icon">{{ item.title }}
+                </van-tabbar-item>
             </template>
             <template v-else>
-                <TabbarItem :name="item.name"
-                            :to="`/${item.name}`">
+                <van-tabbar-item :name="item.name"
+                                 :to="`/${item.name}`">
                     <span>{{ item.title }}</span>
                     <template #icon="props">
                         <img :src="activeTab === item.name ? item.activeImg : item.unActiveImg"/>
                     </template>
-                </TabbarItem>
+                </van-tabbar-item>
             </template>
         </template>
-    </Tabbar>
+    </van-tabbar>
 </template>
 
 <script setup>
-    import {Tabbar, TabbarItem} from 'vant';
     import {ref, reactive} from 'vue';
     //引入本地图片
     import LogoImg from '@/assets/logo.png';

@@ -1,18 +1,18 @@
 <template>
-    <NavBar title="高德地图"
-            left-text="返回" left-arrow
-            @clickLeft="navLeftClick"/>
+    <van-nav-bar title="高德地图"
+                 left-text="返回" left-arrow
+                 @clickLeft="navLeftClick"/>
     <!--高德map地图-->
     <div id="map" style="width: 100%;height: 300px;"></div>
     <!--导航-->
-    <Button icon="share-o" type="primary"
-            @click="navigation.show = true">导航
-    </Button>
+    <van-button icon="share-o" type="primary"
+                @click="navigation.show = true">导航
+    </van-button>
     <!--导航面板-->
-    <ActionSheet description="请选择导航app" cancel-text="取消"
-                 v-model:show="navigation.show"
-                 :actions="navigation.options"
-                 @select="navigation.select"/>
+    <van-action-sheet description="请选择导航app" cancel-text="取消"
+                      v-model:show="navigation.show"
+                      :actions="navigation.options"
+                      @select="navigation.select"/>
 </template>
 
 <script setup>
@@ -21,7 +21,6 @@
     //引入高德地图工具类
     import MapLoader from "@/utils/amap.js";
     import {onMounted, ref, reactive} from 'vue';
-    import {ActionSheet, NavBar, Button} from 'vant';
 
     const $router = useRouter();
     const navLeftClick = () => {

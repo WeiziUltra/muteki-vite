@@ -1,5 +1,16 @@
 //vant组件的常用方法
-import {Notify, Dialog} from 'vant';
+import {Notify, Dialog, Toast} from 'vant';
+import 'vant/es/toast/style';
+import 'vant/es/dialog/style';
+import 'vant/es/notify/style';
+
+/**
+ * 轻提示
+ * @param msg
+ */
+function toast(msg: string = '') {
+    Toast(msg);
+}
 
 /**
  * 错误警告
@@ -133,6 +144,7 @@ function confirm(
 
 //对外抛出方法
 export default {
+    toast,
     errorMsg,
     successMsg,
     alert,

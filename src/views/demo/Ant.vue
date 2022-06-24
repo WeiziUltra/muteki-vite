@@ -1,12 +1,12 @@
 <template>
-    <NavBar title="ant列表" left-text="返回" left-arrow
-            @clickLeft="navLeftClick"/>
-    <ConfigProvider :locale="zhCN">
+    <van-nav-bar title="ant列表" left-text="返回" left-arrow
+                 @clickLeft="navLeftClick"/>
+    <a-configProvider :locale="zhCN">
         <div class="box">
             <div class="form">
                 <a-form layout="inline">
                     <a-form-item>
-                        <Input v-model:value="bwTable.form.name" placeholder="姓名" allow-clear/>
+                        <a-input v-model:value="bwTable.form.name" placeholder="姓名" allow-clear/>
                     </a-form-item>
                     <a-form-item>
                         <a-select v-model:value="bwTable.form.status" style="width: 150px"
@@ -18,71 +18,50 @@
                         </a-select>
                     </a-form-item>
                     <a-form-item>
-                        <Button type="primary" @click="bwTable.getData">查询</Button>
-                        <Button type="primary" @click="myModel.visible = true;">弹窗</Button>
+                        <a-button type="primary" @click="bwTable.getData">查询</a-button>
+                        <a-button type="primary" @click="myModel.visible = true;">弹窗</a-button>
                     </a-form-item>
                 </a-form>
             </div>
             <div class="table">
-                <Table rowKey="id"
-                       size="small" bordered
-                       :scroll="bwTable.scroll"
-                       :dataSource="bwTable.dataSource"
-                       :columns="bwTable.columns"
-                       :pagination="false"
-                       :row-selection="bwTable.rowSelection">
-                </Table>
+                <a-table rowKey="id"
+                         size="small" bordered
+                         :scroll="bwTable.scroll"
+                         :dataSource="bwTable.dataSource"
+                         :columns="bwTable.columns"
+                         :pagination="false"
+                         :row-selection="bwTable.rowSelection">
+                </a-table>
             </div>
             <div class="pagination">
-                <Pagination :current="pagination.current"
-                            :pageSize="pagination.pageSize"
-                            showSizeChanger
-                            :total="pagination.total"
-                            :pageSizeOptions="pagination.pageSizeOptions"
-                            :show-total="(total) => `总计 ${total} 条`"
-                            @change="pagination.change"
-                            @showSizeChange="pagination.showSizeChange"/>
+                <a-pagination :current="pagination.current"
+                              :pageSize="pagination.pageSize"
+                              showSizeChanger
+                              :total="pagination.total"
+                              :pageSizeOptions="pagination.pageSizeOptions"
+                              :show-total="(total) => `总计 ${total} 条`"
+                              @change="pagination.change"
+                              @showSizeChange="pagination.showSizeChange"/>
             </div>
         </div>
         <div>
-            <Modal v-model:visible="myModel.visible"
-                   title="弹窗"
-                   :maskClosable="false"
-                   cancel-text="关闭"
-                   okText="确定"
-                   @ok="myModel.handleOk"
-                   @cancel="myModel.handleCancel">
+            <a-modal v-model:visible="myModel.visible"
+                     title="弹窗"
+                     :maskClosable="false"
+                     cancel-text="关闭"
+                     okText="确定"
+                     @ok="myModel.handleOk"
+                     @cancel="myModel.handleCancel">
                 <h1>我是弹窗</h1>
                 <h1>穿透样式 .ant-modal-wrap 不然微信内置浏览器可能不生效</h1>
-            </Modal>
+            </a-modal>
         </div>
-    </ConfigProvider>
+    </a-configProvider>
 </template>
-
-<script>
-    import {Form, Select} from "ant-design-vue";
-
-    export default {
-        components: {
-            [Form.name]: Form,
-            [Form.Item.name]: Form.Item,
-            [Select.name]: Select,
-            [Select.Option.displayName]: Select.Option,
-        },
-    };
-</script>
 
 <script setup>
     import {
-        Table,
-        Image,
-        Pagination,
-        Input,
-        Button,
-        DatePicker,
         message as $message,
-        Modal,
-        ConfigProvider
     } from "ant-design-vue";
     import {NavBar} from "vant";
     import {ref, reactive, onMounted, nextTick} from "vue";

@@ -1,15 +1,14 @@
 <template>
-    <NavBar title="首页"/>
+    <van-nav-bar title="首页"/>
     <template v-for="nav in navList" :key="nav.title">
-        <Cell is-link
-              :title="nav.title"
-              :to="nav.to"/>
+        <van-cell is-link
+                  :title="nav.title"
+                  :to="nav.to"/>
     </template>
     <WeiTabbar activeTab="home"></WeiTabbar>
 </template>
 
 <script setup>
-    import {NavBar, Cell} from 'vant';
     import {ref, reactive} from 'vue';
     import WeiTabbar from '@/components/tabbar/Index.vue';
 

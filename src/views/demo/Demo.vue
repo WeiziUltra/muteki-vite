@@ -1,24 +1,22 @@
 <template>
-    <NavBar title="demo"
-            left-text="返回" left-arrow
-            @clickLeft="navLeftClick"/>
-    <CellGroup title="vant组件">
-        <Button type="primary" size="small">小型按钮</Button>
-        <Circle :currentRate="1000" :speed="1000"
-                :color="{'0%': '#3fecff','100%': '#6149f6'}"
-                text="1000%"/>
-    </CellGroup>
-    <CellGroup title="常用方法">
-        <Cell v-for="(item,index) in funList" :key="index"
-              :title="item.title" :value="item.value"
-              @click="item.click()"/>
-    </CellGroup>
+    <van-nav-bar title="demo"
+                 left-text="返回" left-arrow
+                 @clickLeft="navLeftClick"/>
+    <van-cell-group title="vant组件">
+        <van-button type="primary" size="small">小型按钮</van-button>
+        <van-circle :currentRate="1000" :speed="1000"
+                    :color="{'0%': '#3fecff','100%': '#6149f6'}"
+                    text="1000%"/>
+    </van-cell-group>
+    <van-cell-group title="常用方法">
+        <van-cell v-for="(item,index) in funList" :key="index"
+                  :title="item.title" :value="item.value"
+                  @click="item.click()"/>
+    </van-cell-group>
 </template>
 
 <script setup>
     import {ref, reactive, onMounted} from 'vue';
-    //引入vant组件
-    import {Circle, Divider, CellGroup, NavBar, Button, Cell} from 'vant';
     //引入全局方法
     import $function from '@/utils/function.ts';
     //引入vant封装方法

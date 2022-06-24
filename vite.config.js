@@ -9,7 +9,8 @@ const root = process.cwd();
 import legacy from '@vitejs/plugin-legacy';
 //gzip压缩
 import viteCompression from 'vite-plugin-compression'
-import styleImport from 'vite-plugin-style-import';
+import {VantResolver, AntDesignVueResolver} from 'unplugin-vue-components/resolvers';
+import Components from 'unplugin-vue-components/vite';
 
 import visualizer from "rollup-plugin-visualizer";
 
@@ -21,13 +22,51 @@ export default ({command, mode}) => {
     //viteEnv   env常量
     const viteEnv = loadEnv(mode, root);
 
-    return defineConfig({
-        plugins: [
-            vue(),
+    /**
+     * 插件
+     * @type {*[]}
+     */
+    let plugins = [
+        vue(),
+    ];
+
+    //开发环境
+    if ('development' === mode) {
+        plugins = plugins.concat([
+            {
+                name: 'dev-auto-import-ui',
+                transform(code, id) {
+                    /*
+                    开发环境全量引入ui组件
+                     */
+                    if ('development' === mode && /src\/main.js$/.test(id)) {
+                        //在main.js代码基础上全量引入ui组件
+                        return {
+                            code: `${code}
+                                import Vant from 'vant';import 'vant/lib/index.css';app.use(Vant);
+                                import Antd from 'ant-design-vue';import 'ant-design-vue/dist/antd.css';app.use(Antd);`
+                        }
+                    }
+                },
+            }
+        ]);
+    } else {
+        //非开发环境
+        plugins = plugins.concat([
             //低版本浏览器
             /*legacy({
                 targets: ['defaults', 'not IE 11']
             }),*/
+            Components({
+                directoryAsNamespace: true,
+                // 按需加载的文件夹
+                dirs: ['src'],
+                //生产环境按需引入、开发环境不操作
+                resolvers: [
+                    AntDesignVueResolver(),
+                    VantResolver(),
+                ],
+            }),
             //gzip
             viteCompression({
                 verbose: true,
@@ -36,28 +75,17 @@ export default ({command, mode}) => {
                 algorithm: 'gzip',
                 ext: '.gz'
             }),
-            styleImport({
-                libs: [{
-                    libraryName: 'vant',
-                    esModule: true,
-                    resolveStyle: (name) => {
-                        return `vant/es/${name}/style`;
-                    },
-                }, {
-                    libraryName: "ant-design-vue",
-                    esModule: true,
-                    resolveStyle: (name) => {
-                        return `ant-design-vue/es/${name}/style/css`;
-                    },
-                }]
-            }),
             //依赖分析
             visualizer({
                 open: "1" === viteEnv['VITE_APP_SHOW_VISUALIZER'],
                 gzipSize: true,
                 brotliSize: true,
             })
-        ],
+        ]);
+    }
+
+    return defineConfig({
+        plugins,
         resolve: {
             //别名配置
             alias: {
@@ -102,13 +130,6 @@ export default ({command, mode}) => {
             sourcemap: PRODUCTION !== mode,
             //启用/禁用 brotli 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。
             brotliSize: false,
-            // 生产环境移除console、debugger
-            terserOptions: {
-                compress: {
-                    drop_console: PRODUCTION === mode,
-                    drop_debugger: PRODUCTION === mode,
-                },
-            },
             //输出配置
             rollupOptions: {
                 /*output: {
