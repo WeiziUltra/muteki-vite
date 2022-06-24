@@ -58,6 +58,10 @@ const routes = [
                 path: 'ant',
                 component: () => import('@/views/demo/Ant.vue')
             },
+            {
+                path: 'pdf',
+                component: () => import('@/views/demo/Pdf.vue')
+            },
         ]
     },
     {
