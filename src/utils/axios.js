@@ -86,10 +86,12 @@ const myAxios = function (
         method,
         headers: {
             'Content-Type': contentType,
-            'token': $function.getLocationStorage('token')
         },
         timeout
     };
+    if (!$function.isBlank($function.getLocationStorage('token'))){
+        _axios['headers']['token'] = $function.getLocationStorage('token');
+    }
     /**axios请求参数添加随机字符串*/
     data['__t'] = (new Date()).getTime();
     /**axios请求处理不同请求方式时的参数*/

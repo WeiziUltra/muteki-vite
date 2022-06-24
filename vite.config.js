@@ -53,7 +53,7 @@ export default ({command, mode}) => {
             }),
             //依赖分析
             visualizer({
-                open: PRODUCTION !== mode,
+                open: "1" === viteEnv['VITE_APP_SHOW_VISUALIZER'],
                 gzipSize: true,
                 brotliSize: true,
             })
@@ -111,11 +111,11 @@ export default ({command, mode}) => {
             },
             //输出配置
             rollupOptions: {
-                output: {
+                /*output: {
                     chunkFileNames: "static/js/[name]-[hash].js",
                     entryFileNames: "static/js/[name]-[hash].js",
                     assetFileNames: "static/[ext]/[name]-[hash].[ext]",
-                },
+                },*/
             },
         },
 

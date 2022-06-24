@@ -33,6 +33,11 @@
     import {useRouter} from 'vue-router';
 
     const props = defineProps({
+        //是否允许请求
+        allowRequest: {
+            type: Boolean,
+            default: true
+        },
         //请求的url
         url: {
             type: String
@@ -165,17 +170,23 @@
 
     //获取数据
     const requestData = () => {
-        let {url, method, contentType, timeout, data = {}, pageSize, timeShowLoadAnimation} = props;
+        let {url, method, contentType, timeout, data = {}, pageSize, timeShowLoadAnimation, allowRequest} = props;
+        if (!allowRequest) {
+            onLoad.loading = false;
+            return;
+        }
         let _axios = {
             //请求的url
             url: import.meta.env.VITE_APP_URL + url,
             method,
             headers: {
                 'Content-Type': contentType,
-                'token': $function.getLocationStorage('token')
             },
             timeout
         };
+        if (!$function.isBlank($function.getLocationStorage('token'))) {
+            _axios['headers']['token'] = $function.getLocationStorage('token');
+        }
         /**axios请求参数添加随机字符串*/
         data['__t'] = (new Date()).getTime();
         data['pageNum'] = pageInfo.pageNum;

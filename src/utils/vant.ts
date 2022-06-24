@@ -6,7 +6,7 @@ import {Notify, Dialog} from 'vant';
  * @param msg
  * @param time
  */
-function errorMsg(msg: string = '失败', time: number = 3000) {
+function errorMsg(msg: string = 'error', time: number = 3000) {
     Notify({
         type: 'danger',
         message: msg,
@@ -19,7 +19,7 @@ function errorMsg(msg: string = '失败', time: number = 3000) {
  * @param msg
  * @param time
  */
-function successMsg(msg: string = '成功', time: number = 3000) {
+function successMsg(msg: string = 'success', time: number = 3000) {
     Notify({
         type: 'success',
         message: msg,

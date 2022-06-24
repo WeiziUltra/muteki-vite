@@ -42,10 +42,16 @@ const routes = [
             },
             {
                 path: 'list',
+                meta: {
+                    title: '分页列表'
+                },
                 component: () => import('@/views/demo/List.vue')
             },
             {
                 path: 'amap',
+                meta: {
+                    title: '高德地图'
+                },
                 component: () => import('@/views/demo/Amap.vue')
             },
             {
@@ -67,11 +73,29 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    let title = import.meta.env.VITE_APP_TITLE;
     //如果设置标题就显示，没设置使用默认
     if (null != to.meta && null != to.meta.title && '' !== to.meta.title) {
-        document.title = to.meta.title || import.meta.env.VITE_APP_TITLE;
+        title = to.meta.title;
+    }
+    //非生产环境添加标识
+    if ('production' !== import.meta.env.MODE) {
+        title = title + ` (${import.meta.env.MODE})`;
+    }
+    if (/ip(hone|od|ad)/i.test(navigator.userAgent)) {
+        setTimeout(function () {
+            document.title = title;
+            let _iframe = document.createElement('iframe');
+            _iframe.style.display = 'none';
+            _iframe.onload = function () {
+                setTimeout(function () {
+                    document.body.removeChild(_iframe);
+                }, 0);
+            };
+            document.body.appendChild(_iframe);
+        }, 0);
     } else {
-        document.title = import.meta.env.VITE_APP_TITLE;
+        document.title = title;
     }
     //浏览器上方显示进度条
     NProgress.start();
@@ -82,6 +106,14 @@ router.beforeEach((to, from, next) => {
 router.afterEach(transition => {
     //关闭浏览器上方的进度条
     NProgress.done();
+});
+
+/**
+ * 捕获错误
+ */
+router.onError(error => {
+    console.warn('路由router错误，error:', error);
+    alert('路由错误error:' + error);
 });
 
 export default router;
