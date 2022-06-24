@@ -22,7 +22,6 @@
 <!--@change:list改变时触发，内置参数list(改变后的数组)-->
 <script setup>
     import {Toast} from 'vant';
-    import 'vant/es/toast/style';
     /**引入axios*/
     import axios from "axios";
     /**引入参数处理*/

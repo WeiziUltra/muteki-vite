@@ -4,7 +4,6 @@ import axios from "axios";
 import Qs from 'qs';
 /**引入vant组件*/
 import {Toast} from 'vant';
-import 'vant/es/toast/style';
 /*引入全局方法*/
 import $function from './function'
 //引入封装的vant

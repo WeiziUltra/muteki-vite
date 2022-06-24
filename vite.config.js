@@ -60,7 +60,7 @@ export default ({command, mode}) => {
             Components({
                 directoryAsNamespace: true,
                 // 按需加载的文件夹
-                dirs: ['src'],
+                dirs: ['src/components', 'src/views'],
                 //生产环境按需引入、开发环境不操作
                 resolvers: [
                     AntDesignVueResolver(),

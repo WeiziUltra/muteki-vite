@@ -5,7 +5,6 @@ import $global from './global';
 import jsMd5 from 'js-md5';
 //vant组件的常用方法
 import {Toast} from 'vant';
-import 'vant/es/toast/style';
 
 /**
  * 判断是否为空

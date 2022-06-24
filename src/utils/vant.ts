@@ -1,8 +1,5 @@
 //vant组件的常用方法
 import {Notify, Dialog, Toast} from 'vant';
-import 'vant/es/toast/style';
-import 'vant/es/dialog/style';
-import 'vant/es/notify/style';
 
 /**
  * 轻提示
