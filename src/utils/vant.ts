@@ -1,12 +1,15 @@
 //vant组件的常用方法
-import {Notify, Dialog, Toast} from 'vant';
+import {showNotify, showDialog, showConfirmDialog, showToast, allowMultipleToast} from 'vant';
+import 'vant/es/toast/style';
+import 'vant/es/dialog/style';
+import 'vant/es/notify/style';
 
 /**
  * 轻提示
  * @param msg
  */
 function toast(msg: string = '') {
-    Toast(msg);
+    showToast(msg);
 }
 
 /**
@@ -15,7 +18,7 @@ function toast(msg: string = '') {
  * @param time
  */
 function errorMsg(msg: string = 'error', time: number = 3000) {
-    Notify({
+    showNotify({
         type: 'danger',
         message: msg,
         duration: time
@@ -28,7 +31,7 @@ function errorMsg(msg: string = 'error', time: number = 3000) {
  * @param time
  */
 function successMsg(msg: string = 'success', time: number = 3000) {
-    Notify({
+    showNotify({
         type: 'success',
         message: msg,
         duration: time
@@ -52,7 +55,7 @@ function alert(
     {
         title = '提示',
         message = '',
-        theme = 'round',
+        theme = '',
         confirmButtonText = '确认',
         confirmButtonColor = '#ee0a24',
         overlay = true,
@@ -63,7 +66,7 @@ function alert(
 
         }
     } = {}) {
-    Dialog.alert({
+    showDialog({
         title,
         message,
         theme,
@@ -99,7 +102,7 @@ function confirm(
     {
         title = '提示',
         message = '',
-        theme = 'round',
+        theme = '',
         confirmButtonText = '确认',
         confirmButtonColor = '#ee0a24',
         cancelButtonText = '取消',
@@ -115,7 +118,7 @@ function confirm(
 
         }
     } = {}) {
-    Dialog.confirm({
+    showConfirmDialog({
         title,
         message,
         theme,

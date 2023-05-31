@@ -1,5 +1,5 @@
 <template>
-    <van-tabbar v-model="activeTab">
+    <van-tabbar v-model="props.activeTab">
         <template v-for="item in tabbar.list" :key="item.name">
             <template v-if="!item.slot">
                 <van-tabbar-item :name="item.name"

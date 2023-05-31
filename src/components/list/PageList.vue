@@ -21,7 +21,11 @@
 <!--分页列表，包含下拉刷新和上拉加载-->
 <!--@change:list改变时触发，内置参数list(改变后的数组)-->
 <script setup>
-    import {Toast} from 'vant';
+    import {showLoadingToast, allowMultipleToast} from 'vant';
+    import 'vant/es/toast/style';
+    import 'vant/es/dialog/style';
+    import 'vant/es/notify/style';
+
     /**引入axios*/
     import axios from "axios";
     /**引入参数处理*/
@@ -31,6 +35,9 @@
     import $vant from '@/utils/vant.ts';
     //引入router
     import {useRouter} from 'vue-router';
+
+    //允许同时存在多个toast
+    allowMultipleToast();
 
     const props = defineProps({
         //是否允许请求
@@ -122,7 +129,7 @@
 
     const $router = useRouter();
 
-    let emit = defineEmits(["change"]);
+    let $emit = defineEmits(["change"]);
 
     //加载失败
     let error = reactive({
@@ -203,7 +210,7 @@
         /**timeShowLoadAnimation时间之后开启加载中动画*/
         let loading = null;
         let loadingTimer = setTimeout(() => {
-            loading = Toast.loading({
+            loading = showLoadingToast({
                 message: '加载中...',
                 forbidClick: true
             });
@@ -212,7 +219,7 @@
             /**关闭加载中动画*/
             clearTimeout(loadingTimer);
             if (null != loading) {
-                loading.clear();
+                loading.close();
             }
             pull.loading = false;
             onLoad.loading = false;
@@ -220,20 +227,18 @@
                 let {code, msg} = res['data'];
                 /**token过期处理*/
                 if (401 === code) {
-                    $vant.errorMsg('登陆过期，自动登录中。。。');
                     error.error = true;
                     error.errorText = `登陆过期，自动登录中。。。`;
-                    let timer = setTimeout(() => {
-                        $router.replace('/login');
-                        clearTimeout(timer);
-                    }, 3000);
+                    //保存最后一个页面
+                    $function.setSessionStorage('_lastHref', window.location.href);
+                    $router.replace('/ddLogin');
                     return;
                 }
                 /**处理code不为0的出错请求*/
                 if (200 !== code) {
-                    $vant.errorMsg(msg);
+                    $vant.errorMsg(message || msg);
                     error.error = true;
-                    error.errorText = msg;
+                    error.errorText = message || msg;
                     console.warn(`url:${url}:请求出错，详情"${JSON.stringify(res['data'])}`)
                     return;
                 }
@@ -249,7 +254,7 @@
                     }
                     try {
                         //对外抛出change事件
-                        emit('change', pageInfo.list);
+                        $emit('change', pageInfo.list);
                     } catch (e) {
                         console.error(e);
                     }
@@ -269,7 +274,7 @@
             /**关闭加载中动画*/
             clearTimeout(loadingTimer);
             if (null != loading) {
-                loading.clear();
+                loading.close();
             }
             pull.loading = false;
             onLoad.loading = false;

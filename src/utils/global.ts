@@ -7,6 +7,8 @@ export default {
     api: {
         //登录
         login: '/api/login',
+        //钉钉鉴权
+        getJsApiTicketConfig: '/api/dingTalk/getJsApiTicketConfig',
         //微信公众号重定向
         getRedirectUri: '/api/wx/getRedirectUri',
         //用户部分

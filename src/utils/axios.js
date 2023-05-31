@@ -3,7 +3,7 @@ import axios from "axios";
 /**引入参数处理*/
 import Qs from 'qs';
 /**引入vant组件*/
-import {Toast} from 'vant';
+import {showLoadingToast} from 'vant';
 /*引入全局方法*/
 import $function from './function'
 //引入封装的vant
@@ -35,6 +35,7 @@ axios.interceptors.request.use(
  * @param data 请求参数
  * @param timeout 请求超时时间---某些请求需要单独设置超时时间
  * @param timeShowLoadAnimation 多长时间之后显示加载中动画,单位毫秒
+ * @param errShowAlert 异常信息展示弹窗
  * @param success 成功回调
  * @param fail 失败回调
  */
@@ -49,6 +50,7 @@ const myAxios = function (
         data = {},
         timeout = parseInt(import.meta.env.VITE_APP_AXIOS_TIMEOUT || 20000),
         timeShowLoadAnimation = 555,
+        errShowAlert = false,
         success = function () {
         },
         fail = function () {
@@ -70,7 +72,7 @@ const myAxios = function (
     /**timeShowLoadAnimation时间之后开启加载中动画*/
     let loading = null;
     let loadingTimer = setTimeout(() => {
-        loading = Toast.loading({
+        loading = showLoadingToast({
             message: '加载中...',
             forbidClick: true,
             duration: 0,
@@ -114,7 +116,7 @@ const myAxios = function (
         /**关闭加载中动画*/
         clearTimeout(loadingTimer);
         if (null != loading) {
-            loading.clear();
+            loading.close();
         }
         /***请求的url如果是全部url的话,返回所有res['data']响应***/
         if (allUrl) {
@@ -127,11 +129,9 @@ const myAxios = function (
         }
         /**token过期处理*/
         if (401 === res.data.code) {
-            $vant.errorMsg('登陆过期，自动登录中。。。');
-            let timer = setTimeout(() => {
-                clearTimeout(timer);
-                $router.replace('login');
-            }, 3000);
+            //保存最后一个页面
+            $function.setSessionStorage('_lastHref', window.location.href);
+            $router.replace('/ddLogin');
             return;
         }
         /**返回所有成功回调,不包含status不是401的出错请求*/
@@ -145,7 +145,13 @@ const myAxios = function (
         }
         /**处理code不为0的出错请求*/
         if (200 !== res.data.code) {
-            $vant.errorMsg(res.data.msg);
+            if (errShowAlert) {
+                $vant.alert({
+                    message: res.data.message || res.data.msg
+                });
+            } else {
+                $vant.errorMsg(res.data.message || res.data.msg);
+            }
             consoleWarnTable(`请求出错url:${url}`, res['data']);
             return;
         }
@@ -163,7 +169,7 @@ const myAxios = function (
         /**关闭加载中动画*/
         clearTimeout(loadingTimer);
         if (null != loading) {
-            loading.clear();
+            loading.close();
         }
         // 如果请求被取消则进入该方法
         if (axios.isCancel(error)) {

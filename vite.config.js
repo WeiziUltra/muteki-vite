@@ -13,6 +13,7 @@ import {VantResolver, AntDesignVueResolver} from 'unplugin-vue-components/resolv
 import Components from 'unplugin-vue-components/vite';
 
 import visualizer from "rollup-plugin-visualizer";
+import {createHtmlPlugin} from "vite-plugin-html";
 
 /**
  * 配置官网
@@ -28,30 +29,36 @@ export default ({command, mode}) => {
      */
     let plugins = [
         vue(),
-    ];
-
-    //开发环境
-    if ('development' === mode) {
-        plugins = plugins.concat([
-            {
-                name: 'dev-auto-import-ui',
-                transform(code, id) {
-                    /*
-                    开发环境全量引入ui组件
-                     */
-                    if ('development' === mode && /src\/main.js$/.test(id)) {
-                        //在main.js代码基础上全量引入ui组件
+        createHtmlPlugin({
+            /**
+             * 需要注入 index.html ejs 模版的数据
+             */
+            inject: {
+                data: {
+                    title: viteEnv['VITE_APP_TITLE'],
+                },
+            },
+        }),
+        {
+            name: 'auto-import',
+            transform(code, id) {
+                //main.js
+                if (/src\/main.js$/.test(id)) {
+                    if ('development' === mode) {
+                        //开发环境全量引入vant、ant
                         return {
                             code: `${code}
                                 import Vant from 'vant';import 'vant/lib/index.css';app.use(Vant);
                                 import Antd from 'ant-design-vue';import 'ant-design-vue/dist/antd.css';app.use(Antd);`
                         }
                     }
-                },
-            }
-        ]);
-    } else {
-        //非开发环境
+                }
+            },
+        }
+    ];
+
+    //非开发环境
+    if ('development' !== mode) {
         plugins = plugins.concat([
             //低版本浏览器
             /*legacy({
@@ -69,7 +76,9 @@ export default ({command, mode}) => {
             }),
             //gzip
             viteCompression({
-                verbose: true,
+                // 输出压缩成功
+                verbose: false,
+                // 是否禁用
                 disable: false,
                 threshold: 1024,
                 algorithm: 'gzip',
@@ -77,7 +86,7 @@ export default ({command, mode}) => {
             }),
             //依赖分析
             visualizer({
-                open: "1" === viteEnv['VITE_APP_SHOW_VISUALIZER'],
+                open: "1" === viteEnv['BUILD_SHOW_VISUALIZER'],
                 gzipSize: true,
                 brotliSize: true,
             })
@@ -98,7 +107,8 @@ export default ({command, mode}) => {
          * 完整的 URL，例如 https://foo.com/
          * 空字符串或 ./（用于开发环境）
          */
-        base: PRODUCTION === mode ? '/muteki-vite/' : './',
+        // base: PRODUCTION === mode ? '/muteki-vite/' : './',
+        base: './',
         server: {
             port: 80,
             host: '0.0.0.0',
@@ -125,19 +135,20 @@ export default ({command, mode}) => {
             assetsDir: 'assets',
             //启用/禁用 CSS 代码拆分。当启用时，在异步 chunk 中导入的 CSS 将内联到异步 chunk 本身，并在块加载时插入。
             // 如果禁用，整个项目中的所有 CSS 将被提取到一个 CSS 文件中。
-            cssCodeSplit: true,
+            // 移动端项目css文件很小，建议禁用
+            cssCodeSplit: "0" === viteEnv['BUILD_SHOW_VISUALIZER'],
             //在构建生产包时生成 sourceMap 文件
             sourcemap: PRODUCTION !== mode,
-            //启用/禁用 brotli 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。
-            brotliSize: false,
             //输出配置
             rollupOptions: {
-                /*output: {
-                    chunkFileNames: "static/js/[name]-[hash].js",
-                    entryFileNames: "static/js/[name]-[hash].js",
-                    assetFileNames: "static/[ext]/[name]-[hash].[ext]",
-                },*/
+                output: {
+                    chunkFileNames: "js/[name]-[hash].js",
+                    entryFileNames: "js/[name]-[hash].js",
+                    assetFileNames: "[ext]/[name]-[hash].[ext]",
+                },
             },
+            //启用/禁用 gzip 压缩大小报告。压缩大型输出文件可能会很慢，因此禁用该功能可能会提高大型项目的构建性能。
+            reportCompressedSize: false
         },
 
     });

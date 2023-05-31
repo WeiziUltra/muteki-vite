@@ -54,14 +54,14 @@ const routes = [
                 },
                 component: () => import('@/views/demo/Amap.vue')
             },
-            {
+            /*{
                 path: 'ant',
                 component: () => import('@/views/demo/Ant.vue')
             },
             {
                 path: 'pdf',
                 component: () => import('@/views/demo/Pdf.vue')
-            },
+            },*/
         ]
     },
     {

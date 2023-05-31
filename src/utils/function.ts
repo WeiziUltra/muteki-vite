@@ -1,10 +1,12 @@
 //引入全局常量
 import $global from './global';
 //md5
-// @ts-ignore
-import jsMd5 from 'js-md5';
+import {hex_md5} from './md5.js';
 //vant组件的常用方法
-import {Toast} from 'vant';
+import {showToast, allowMultipleToast} from 'vant';
+
+//允许同时存在多个toast
+allowMultipleToast();
 
 /**
  * 判断是否为空
@@ -193,7 +195,7 @@ function removeLocationStorage(key: string) {
  * @param str
  */
 function md5(str: string) {
-    return jsMd5(str);
+    return hex_md5(str);
 }
 
 /**
@@ -236,18 +238,112 @@ function copyClipboard(value = '') {
     input.setSelectionRange(0, 99999);
     if (document.execCommand) {
         document.execCommand('copy');
-        Toast({
-            message: '内容已复制',
-            position: 'bottom',
-        });
+        showToast(`复制成功`);
     } else {
-        Toast({
-            message: '当前浏览器不支持复制功能',
-            position: 'bottom',
-        });
+        showToast(`复制失败`);
     }
     input.blur();
     document.body.removeChild(input);
+}
+
+/**
+ * 图片压缩
+ * @param file
+ * @param fileType
+ * @param fileName
+ * @param quality
+ * @param success
+ * @param error
+ */
+function compressImg({
+                         file = null,
+                         fileType = null,
+                         fileName = null,
+                         quality = null,
+                         success = function () {
+
+                         },
+                         error = function () {
+
+                         }
+                     } = {}) {
+    try {
+        if ('image/png' === file['type'] || file['name'].endsWith('.png')) {
+            console.warn('png格式图片不建议压缩');
+        }
+        // @ts-ignore
+        let fileSize: number = (file['size'] / 1024 / 1024).toFixed(2);
+        if (null == quality) {
+            //不指定压缩率，默认压缩率
+            if (1 > fileSize) {
+                try {
+                    console.log('因图片小于1M，不进行压缩。');
+                    console.log('  原图片：', file);
+                    // @ts-ignore
+                    success(file);
+                } catch (e) {
+                    console.error(e);
+                }
+                return;
+            } else if (2 > fileSize && 1 <= fileSize) {
+                quality = 0.8;
+            } else if (3 > fileSize && 2 <= fileSize) {
+                quality = 0.7;
+            } else if (6 > fileSize && 3 <= fileSize) {
+                quality = 0.5;
+            } else {
+                quality = 0.3;
+            }
+        }
+        let read = new FileReader();
+        read.readAsDataURL(file);
+        let img = new Image();
+        read.onload = function (e) {
+            // @ts-ignore
+            img.src = e['target']['result'];
+            img.onload = function () {
+                //默认按比例压缩
+                // @ts-ignore
+                let w = this.width,
+                    // @ts-ignore
+                    h = this.height;
+                //生成canvas
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+                // 创建属性节点
+                canvas.setAttribute("width", w);
+                canvas.setAttribute("height", h);
+                // @ts-ignore
+                ctx.drawImage(this, 0, 0, w, h);
+                let base64 = canvas.toDataURL(fileType || file['type'], quality);
+                let arr = base64.split(','),
+                    bStr = atob(arr[1]),
+                    n = bStr.length,
+                    u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bStr.charCodeAt(n);
+                }
+                let files = new File([u8arr], fileName || file['name']);
+                console.log('图片压缩成功：');
+                console.log('  压缩前：', file);
+                console.log('  压缩后：', files);
+                try {
+                    // @ts-ignore
+                    success(files);
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+        };
+    } catch (e) {
+        console.warn('图片压缩异常,file:', file, '异常详情：', e);
+        try {
+            // @ts-ignore
+            error(e);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 }
 
 /**
@@ -271,4 +367,5 @@ export default {
     isIdNumber,
     callPhone,
     copyClipboard,
+    compressImg,
 };
